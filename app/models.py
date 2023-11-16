@@ -59,7 +59,7 @@ class Vehicle(Base):
     registration_date: Mapped[date]
     owner_id: Mapped[int] = mapped_column(ForeignKey('user.id', ondelete='CASCADE'))
     type: Mapped[VehicleType]
-    seats: Mapped[int]
+    seats_count: Mapped[int]
 
 
 class Ride(Base):
@@ -72,11 +72,12 @@ class Ride(Base):
     arrival: Mapped[str] = mapped_column(index=True)
     departure_at: Mapped[datetime]
     arrival_at: Mapped[datetime]
-    seats: Mapped[int]
+    passenger_seats: Mapped[int]
     price: Mapped[int]
     comment: Mapped[str] = mapped_column(String(255))
     with_approval: Mapped[bool]
     driver_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete='CASCADE'))
+    vehicle_id: Mapped[int] = mapped_column(ForeignKey("vehicle.id", ondelete='SET NULL'))
 
 
 class Booking(Base):
