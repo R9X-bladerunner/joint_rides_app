@@ -5,18 +5,25 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api import deps
 from app.core.security import get_password_hash
 from app.models import User
-from app.schemas.requests import UserCreateRequest, UserUpdatePasswordRequest
-from app.schemas.responses import UserResponse
+from app.schemas.requests import UserCreateRequest, UserUpdatePasswordRequest, UserUpdateInfoRequest
+from app.schemas.responses import UserPrivateResponse
 
 router = APIRouter()
 
 
-@router.get("/me", response_model=UserResponse)
+@router.get("/me", response_model=UserPrivateResponse)
 async def read_current_user(
     current_user: User = Depends(deps.get_current_user),
 ):
     """Get current user"""
     return current_user
+
+
+@router.patch("/me", response_model=UserUpdateInfoRequest)
+async def update_current_user_info(
+    current_user: User = Depends(deps.get_current_user),
+):
+    pass
 
 
 @router.delete("/me", status_code=204)
@@ -29,7 +36,7 @@ async def delete_current_user(
     await session.commit()
 
 
-@router.post("/reset-password", response_model=UserResponse)
+@router.post("/reset-password", response_model=UserPrivateResponse)
 async def reset_current_user_password(
     user_update_password: UserUpdatePasswordRequest,
     session: AsyncSession = Depends(deps.get_session),
@@ -42,7 +49,7 @@ async def reset_current_user_password(
     return current_user
 
 
-@router.post("/register", response_model=UserResponse)
+@router.post("/register", response_model=UserPrivateResponse)
 async def register_new_user(
     new_user: UserCreateRequest,
     session: AsyncSession = Depends(deps.get_session),
@@ -58,3 +65,5 @@ async def register_new_user(
     session.add(user)
     await session.commit()
     return user
+
+
