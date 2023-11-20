@@ -27,15 +27,14 @@ class VehicleResponse(BaseResponse):
     model: str
     color: str
     registration_date: date
-    owner_id: int
     type: VehicleType
-    seats_count: int
+    seats: int
 
 
 class UserResponse(BaseResponse):
     id: int
-    name: str
-    surname: str
+    first_name: str
+    last_name: str
     rating: float | None = None
 
 
@@ -45,30 +44,44 @@ class UserPublicResponse(UserResponse):
 
 class UserPrivateResponse(UserResponse):
     email: EmailStr
-    birthday: datetime | None = None
-    vehicles: list[VehicleResponse]
+    birthday: date | None = None
 
 
 class RideResponse(BaseResponse):
     id: int
     created_at: datetime
-    departure: int
+    departure: str
     arrival: str
     departure_at: datetime
     arrival_at: datetime
-    passenger_seats: int
+    seats: int
     price: int
-    comment: str | None = None
     with_approval: bool
+    comment: str | None = None
+
+
+class RideCreateResponse(RideResponse):
+    pass
+
+
+class RideDetailedResponse(RideResponse):
     driver: UserPublicResponse
-    vehicle: VehicleResponse
+    vehicle: VehicleResponse | None = None
+    free_seats: int
 
 
+class BookingResponse(BaseResponse):
+    id: int
+    ride_id: int
+    filled_at: datetime
+    approve: bool
+    approved_at: datetime | None = None
+    seats: int
 
 
+class BookingCreateResponse(BookingResponse):
+    pass
 
 
-
-
-
-
+class BookingDetailedResponse(BookingResponse):
+    ride: RideResponse
