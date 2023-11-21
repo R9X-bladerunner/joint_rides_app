@@ -134,7 +134,7 @@ async def get_ride_approved_seats(
     ride: Ride = Depends(get_valid_ride), session: AsyncSession = Depends(get_session)
 ):
     query = select(func.sum(Booking.seats)).where(
-        and_(Booking.ride_id == ride.id, Booking.approve == True)
+        and_(Booking.ride_id == ride.id, Booking.approved == True)
     )
     approved_seats = await session.scalar(query)
 
@@ -186,13 +186,11 @@ async def get_user_info(
 ):
     query = (
         select(User)
-        .options(
-            joinedload(User.rides, Ride.bookings)
-        )
+        .options(joinedload(User.rides, Ride.bookings))
         .where(
             and_(
                 User.id == user_id,
-                Ride.departure_at > datetime.datetime.now(tz=datetime.timezone.utc)
+                Ride.departure_at > datetime.datetime.now(tz=datetime.timezone.utc),
             )
         )
     )

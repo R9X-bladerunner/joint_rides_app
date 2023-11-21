@@ -32,12 +32,12 @@ async def book_ride(
 
     if ride.with_approval:
         booking = Booking(
-            passenger_id=current_user.id, approve=False, seats=requested_seats
+            passenger_id=current_user.id, approved=False, seats=requested_seats
         )
     else:
         booking = Booking(
             passenger_id=current_user.id,
-            approve=True,
+            approved=True,
             approved_at=datetime.now(tz=timezone.utc),
             seats=requested_seats,
         )

@@ -74,7 +74,7 @@ class BookingResponse(BaseResponse):
     id: int
     ride_id: int
     filled_at: datetime
-    approve: bool
+    approved: bool
     approved_at: datetime | None = None
     seats: int
 
@@ -85,3 +85,4 @@ class BookingCreateResponse(BookingResponse):
 
 class BookingDetailedResponse(BookingResponse):
     ride: RideResponse
+    passenger: UserPublicResponse

@@ -69,17 +69,18 @@ class Booking(Base):
     filled_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), insert_default=func.now()
     )
-    approve: Mapped[bool]
+    approved: Mapped[bool]
     approved_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     seats: Mapped[int]
     ride: Mapped["Ride"] = relationship(back_populates="bookings", lazy="joined")
+    passenger: Mapped['User'] = relationship(lazy='joined')
 
 
 class Ride(Base):
     __tablename__ = "ride"
     id: Mapped[int] = mapped_column(primary_key=True)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), insert_default=func.now()
+        DateTime(timezone=True), server_default=func.now()
     )
     departure: Mapped[str] = mapped_column(index=True)
     arrival: Mapped[str] = mapped_column(index=True)
@@ -104,8 +105,10 @@ class Messages(Base):
     sender_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     recipient_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), insert_default=func.now()
+        DateTime(timezone=True), server_default=func.now()
     )
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_onupdate=func.now()
+    )
     ride_id: Mapped[str] = mapped_column(ForeignKey("ride.id", ondelete="CASCADE"))
     message_text: Mapped[str] = mapped_column(String(1000))
