@@ -20,7 +20,7 @@ PWD_CONTEXT = CryptContext(
 
 
 class JWTTokenPayload(BaseModel):
-    sub: str | int
+    sub: int
     refresh: bool
     issued_at: int
     expires_at: int
